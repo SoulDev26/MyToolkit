@@ -1,0 +1,86 @@
+
+# Downloading and moving nvim AppImage into /usr/local/bin
+
+curl -LO https://github.com/neovim/neovim/releases/latest/download/nvim.appimage
+chmod u+x nvim.appimage
+mv nvim.appimage /usr/local/bin/nvim
+
+# Configuring nvim
+
+mkdir ~/.config/nvim
+touch ~/.config/init.vim
+
+# Installing vim-plug
+
+sh -c 'curl -fLo "${XDG_DATA_HOME:-$HOME/.local/share}"/nvim/site/autoload/plug.vim --create-dirs \
+       https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
+
+# init.vim content:
+set number
+set relativenumber
+set noswapfile
+set scrolloff=7
+
+set tabstop=4
+set softtabstop=4
+set shiftwidth=4
+set smarttab
+set fileformat=unix
+filetype indent on
+
+call plug#begin('~/.vim/plugged')
+
+Plug 'vim-airline/vim-airline'
+Plug 'https://github.com/preservim/nerdtree'
+Plug 'https://github.com/ap/vim-css-color'
+Plug 'https://github.com/tpope/vim-surround'
+Plug 'https://github.com/ryanoasis/vim-devicons'
+Plug 'https://github.com/tc50cal/vim-terminal'
+Plug 'https://github.com/preservim/tagbar'
+Plug 'https://github.com/neoclide/coc.nvim'
+Plug 'kyazdani42/nvim-web-devicons'
+Plug 'romgrk/barbar.nvim'
+
+Plug 'morhetz/gruvbox'
+Plug 'mhartington/oceanic-next'
+Plug 'kaicataldo/material.vim', {'branch': 'main'}
+Plug 'ayu-theme/ayu-vim'
+
+call plug#end()
+
+colorscheme gruvbox
+
+nnoremap <C-n> :NERDTreeToggle<CR>
+nmap <F8> :TagbarToggle<CR>
+
+nnoremap <silent> <A-,> :BufferPrevious<CR>
+nnoremap <silent> <A-.> :BufferNext<CR>
+nnoremap <silent> <A-c> :BufferClose<CR>
+
+nnoremap <C-Left> :b<CR>
+nnoremap <C-Right> :w<CR>
+
+nmap <C-Left> b
+nmap <C-Right> w
+
+
+set mouse+=a
+
+if (has('termguicolors'))
+	set termguicolors
+endif
+
+# Installing additional packages
+
+sudo pacman -Sy ctags nodejs npm python3 python3-pip rust-analyzer
+
+cd ~/.config/nvim/plugged/coc.nvim/
+sudo npm install -g yarn
+yarn install
+yarn build
+
+python3 -m pip install -U pip
+pip install jedi
+
+# Coc lsp servers:
+coc-sh coc-clangd coc-cmake coc-css coc-go coc-html coc-tsserver coc-json coc-texlab coc-sumneko-lua coc-markdownlint coc-jedi coc-rust-analyzer 
