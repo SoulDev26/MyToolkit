@@ -8,6 +8,7 @@ set softtabstop=4
 set shiftwidth=4
 set smarttab
 set fileformat=unix
+
 filetype indent on
 
 call plug#begin('~/.vim/plugged')
@@ -22,6 +23,7 @@ Plug 'https://github.com/preservim/tagbar'
 Plug 'https://github.com/neoclide/coc.nvim'
 Plug 'kyazdani42/nvim-web-devicons'
 Plug 'romgrk/barbar.nvim'
+Plug 'jiangmiao/auto-pairs'
 
 Plug 'morhetz/gruvbox'
 Plug 'mhartington/oceanic-next'
@@ -30,21 +32,34 @@ Plug 'ayu-theme/ayu-vim'
 
 call plug#end()
 
+let g:airline#extensions#tabline#enabled = 1
+
 colorscheme gruvbox
+
+"inoremap jk <esc>
+
+
+inoremap <silent><expr> <S-CR> coc#pum#visible() ? coc#pum#cancel() : "\<S-CR>"
+inoremap <silent><expr> <CR> coc#pum#visible() ? coc#pum#confirm() : "\<CR>"
 
 nnoremap <C-n> :NERDTreeToggle<CR>
 nmap <F8> :TagbarToggle<CR>
 
-nnoremap <silent> <A-,> :BufferPrevious<CR>
-nnoremap <silent> <A-.> :BufferNext<CR>
-nnoremap <silent> <A-c> :BufferClose<CR>
+nnoremap <silent> <A-,> <CMD>BufferPrevious<CR>
+nnoremap <silent> <A-.> <CMD>BufferNext<CR>
+nnoremap <silent> <A-c> <CMD>BufferClose<CR>
+nnoremap <silent> <A-<> <CMD>BufferMovePrevious<CR>
+nnoremap <silent> <A->> <CMD>BufferMoveNext<CR>
 
-nnoremap <C-Left> :b<CR>
-nnoremap <C-Right> :w<CR>
+nnoremap <C-Left> <CMD>b<CR>
+nnoremap <C-Right> <CMD>w<CR>
+
+nnoremap <esc> <CMD>noh<return><esc>
 
 nmap <C-Left> b
 nmap <C-Right> w
 
+let g:AutoPairsShortcutToggle = ''
 
 set mouse+=a
 
